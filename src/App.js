@@ -1,52 +1,19 @@
-import Header from './Header';
-import Video from  './Video';
-import Buscar from  './Buscar';
-import { videos } from './data/Videos';
-import { VideoContext } from './VideoContext';
-import ListVideo from './ListVideos';
+import PaginaInicial from "./components/paginaInicial";
+import Login from "./components/login";
 import React from 'react';
+import { UsuarioContext } from "./usuarioContext";
+import { usuarios } from "./data/usuarios";
 
 function App() {
-  const [usuario, setUsuario] = React.useState();
-  const [senha, setSenha] = React.useState();
   const [logado, setLogado] = React.useState();
 
-  function CheckLogin(){
-    if(usuario == "Andre" && senha == "Senha123"){
-      setLogado({
-        nome: "André Nakayama"
-      });
-    }
-  }
+  return(
+    <div>
+      <UsuarioContext.Provider value={usuarios}>
+        {logado? <PaginaInicial logado={logado} setLogado={setLogado}/> : <Login setLogado={setLogado}/>}
+      </UsuarioContext.Provider>
+    </div>
+  )
 
-  function Deslogar(){
-    setLogado();
-    setUsuario("");
-    setSenha("");
-  }
-
-  if(!logado){
-    return (
-      <div>
-        Usuario: <input type="text" onChange={(e) => setUsuario(e.target.value)} />
-        Senha: <input type="password" onChange={(e) => setSenha(e.target.value)} />
-        <button onClick={CheckLogin}>Login</button>
-      </div>
-      
-    );
-  }else{
-    return (
-      <>
-        <h1>{logado.nome}</h1>
-        <button onClick={Deslogar}>Deslogar</button>
-        <div className='container'>
-          <VideoContext.Provider value={videos}>
-            <Header />
-            <Buscar />
-            <ListVideo />
-          </VideoContext.Provider>
-        </div>
-      </>)
-  }
 }
 export default App;
